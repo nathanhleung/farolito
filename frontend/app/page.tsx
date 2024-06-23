@@ -9,7 +9,8 @@ import Link from "next/link";
 
 export default function Home() {
   const [uploading, setUploading] = useState(false);
-  const { pageImages, setPageImages } = useContext(PageImagesContext);
+  const { pageImages, setPageImages, setFileToken } =
+    useContext(PageImagesContext);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -29,6 +30,7 @@ export default function Home() {
         );
         const json = await response.json();
         setPageImages(json.page_images);
+        setFileToken(json.file_token);
       } finally {
         setUploading(false);
       }
