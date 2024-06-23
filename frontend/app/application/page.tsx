@@ -3,11 +3,28 @@
 import { PageImagesContext } from "@/app/context/PageImagesProvider";
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import useWebSocket, { ReadyState } from "react-use-websocket";
 
 export default function Application() {
-  const { pageImages } = useContext(PageImagesContext);
+  const { pageImages, fileToken } = useContext(PageImagesContext);
   const { replace } = useRouter();
   const [pageIndex, setPageIndex] = useState(0);
+  const { sendMessage, lastMessage, readyState } = useWebSocket(
+    process.env.NEXT_PUBLIC_ASSISTANT_WEBSOCKET_ENDPOINT!
+  );
+  useEffect(() => {
+    if (readyState === ReadyState.OPEN && fileToken !== "") {
+      sendMessage(
+        JSON.stringify({
+          file_token: fileToken,
+        })
+      );
+    }
+  }, [readyState, fileToken, sendMessage]);
+
+  useEffect(() => {
+    console.log(lastMessage);
+  }, [lastMessage]);
 
   useEffect(() => {
     if (pageImages.length === 0) {
