@@ -1,7 +1,8 @@
 from run_assistant import run_assistant 
 
 def main():
-    path_to_pdf = "../assets/hawaii_medicaid.pdf"
+    path_to_pdf = "assets/hawaii_medicaid.pdf"
+    # path_to_pdf = "assets/idaho_medicaid.pdf"
     assistant_output = run_assistant(path_to_pdf)
 
     for output in assistant_output:
