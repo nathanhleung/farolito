@@ -1,7 +1,5 @@
 # outofpocket
 
-Don't forget to in each directory and set .
-
 ## `ingest`
 
 FastAPI endpoints to read DL and paystub info
