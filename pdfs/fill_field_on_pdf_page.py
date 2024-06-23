@@ -21,7 +21,9 @@ Get the bounding box around field label from the
 EasyOCR results
 """
 def _get_field_label_bounding_box(field_name: str, ocr_results):
-    field = next(result for result in ocr_results if field_name in result[1].lower())
+    print(field_name)
+    field = next(result for result in ocr_results if field_name in result[1])
+    print(field)
     return field[0]
 
 """
@@ -34,27 +36,33 @@ def _get_reasonable_field_font_size(field_name: str, ocr_results):
     bottom_left_coordinates = bounding_box[3]
     top_left_y_coordinate = top_left_coordinates[1]
     bottom_left_y_coordinate = bottom_left_coordinates[1]
-    return (bottom_left_y_coordinate - top_left_y_coordinate) * 2
+    return int((bottom_left_y_coordinate - top_left_y_coordinate) * 1.5)
 
 """
 Writes the `value` for the given `field_name` on page `page`
 of the pdf.
 """
-def fill_field_on_pdf_page(path_to_pdf: str, page: int, field_name: str, value: str):
+def fill_fields_on_pdf_page(path_to_pdf: str, page: int, field_values_to_fill: dict):
     page_images_bytes = pdf_to_pngs.pdf_to_pngs_bytes(path_to_pdf)
     ocr_results = _get_pdf_page_ocr_results(path_to_pdf, page)
+    
     img = Image.open(page_images_bytes[page])
     draw = ImageDraw.Draw(img)
-    open_sans_font = ImageFont.truetype(
-        '../assets/OpenSans.ttf',
-        _get_reasonable_field_font_size(field_name, ocr_results)
-    )
-    bounding_box = _get_field_label_bounding_box(field_name, ocr_results)
-    # Put the field value to the right of the label
-    top_right_coordinates = bounding_box[1]
-    draw.text(
-        top_right_coordinates, value,
-        font=open_sans_font,
-        fill=(0, 0, 255)
-    )
+
+    for key in field_values_to_fill.keys():
+        field_name = key
+        value = field_values_to_fill[key]
+
+        open_sans_font = ImageFont.truetype(
+            'assets/OpenSans.ttf',
+            _get_reasonable_field_font_size(field_name, ocr_results)
+        )
+        bounding_box = _get_field_label_bounding_box(field_name, ocr_results)
+        # Put the field value to the right of the label
+        top_right_coordinates = bounding_box[1]
+        draw.text(
+            top_right_coordinates, value,
+            font=open_sans_font,
+            fill=(0, 0, 255)
+        )
     img.show()

@@ -3,8 +3,7 @@ from openai import OpenAI
 import textwrap
 import json
 import pdf_to_pngs
-from fill_field_on_pdf_page import fill_field_on_pdf_page
-import os
+import sys
 
 load_dotenv()
 client = OpenAI()
@@ -103,5 +102,3 @@ def run_assistant(path_to_pdf: str):
             })
         else:
             user_response = yield parsed_response
-
-        # fill_field_on_pdf_page("../assets/hawaii_medicaid.pdf", 2, 'first name', 'nikhil')

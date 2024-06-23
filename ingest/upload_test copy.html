@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>title</title>
+</head>
+<body>
+    <h2>Pay stub upload</h2>
+    <form method="post" action="http://127.0.0.1:8000/upload-paystub/" enctype="multipart/form-data">
+        <div>
+            <label for="file">Choose file to upload</label>
+            <input type="file" id="file" name="file" multiple />
+        </div>
+        <div>
+            <button>Submit</button>
+        </div>
+    </form>
+
+    <h2>DL upload</h2>
+    <form method="post" action="http://127.0.0.1:8000/upload-drivers/" enctype="multipart/form-data">
+        <div>
+            <label for="file">Choose file to upload</label>
+            <input type="file" id="file" name="file" multiple />
+        </div>
+        <div>
+            <button>Submit</button>
+        </div>
+    </form>
+</body>
+</html>
