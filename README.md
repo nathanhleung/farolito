@@ -28,7 +28,7 @@ code for converting pdfs to images, writing text to pdfs, sending pdfs to openai
 
 ## `frontend`
 
-frontend
+frontend for the app
 
 1. `npm install`
 1. Set `NEXT_PUBLIC_INGEST_API_ENDPOINT` in `.env.local` (in `frontend` directory) — based on the pod ID and exposed port (probably `8000`) from Runpod, include protocol, no trailing slash

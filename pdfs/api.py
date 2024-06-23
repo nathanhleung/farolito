@@ -1,9 +1,10 @@
 import aiofiles
 from fastapi import FastAPI, WebSocket, File, UploadFile
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import Response
 from dotenv import load_dotenv
 from pdf_to_pngs import pdf_bytes_to_pngs_base64
 from uuid import uuid4
+import asyncio
 
 from fill_field_on_pdf_page import fill_fields_on_pdf_page, _get_pdf_page_ocr_results
 from gpt_soft_match import get_soft_mappings
@@ -35,13 +36,21 @@ async def get_pdf_pngs_base64(file: UploadFile = File(...)):
 @app.websocket("/assistant")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    while True:
+    try:
         data = await websocket.receive_json()
         if data["file_token"] != '':
             file_token = data["file_token"]
-            await websocket.send_text(f"{data}")
-            async for data in run_assistant("user_data/" + file_token + ".pdf"):
-                await websocket.send_text(f"{data}")
+            print("Running assistant on file " + file_token + ".pdf")
+            loop = asyncio.get_running_loop()
+            assistant_generator = run_assistant("user_data/" + file_token + ".pdf")
+
+            while True:
+                data = await loop.run_in_executor(None, lambda: next(assistant_generator, None))
+                if data is None:
+                    break
+                await websocket.send_json(data)
+    except Exception as e:
+        print(e)
 
 class HTMLResponse(BaseModel):
     page : int
