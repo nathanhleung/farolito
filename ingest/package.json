@@ -9,18 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "next": "14.2.4",
+    "openai": "^4.52.0",
+    "pdf-lib": "^1.17.1",
+    "pdf-parse": "^1.1.1",
+    "pdf2pic": "^3.1.1",
+    "pdfjs-dist": "^4.3.136",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.4"
+    "react-dropzone": "^14.2.3"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
+    "@types/pdf-parse": "^1.1.4",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.4",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.4"
+    "typescript": "^5"
   }
 }
