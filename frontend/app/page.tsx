@@ -1,6 +1,6 @@
 "use client";
 
-import { PageImagesContext } from "@/app/context/PageImagesProvider";
+import { AppContext } from "@/app/context/AppProvider";
 import { Button } from "@/components/ui/button";
 import { useCallback, useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -9,8 +9,7 @@ import Link from "next/link";
 
 export default function Home() {
   const [uploading, setUploading] = useState(false);
-  const { pageImages, setPageImages, setFileToken } =
-    useContext(PageImagesContext);
+  const { pageImages, setPageImages, setFileToken } = useContext(AppContext);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {

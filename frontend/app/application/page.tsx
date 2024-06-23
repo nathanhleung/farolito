@@ -1,11 +1,11 @@
 "use client";
 
-import { PageImagesContext } from "@/app/context/PageImagesProvider";
+import { AppContext } from "@/app/context/AppProvider";
 import { Button } from "@/components/ui/button";
 import { useQueue } from "@uidotdev/usehooks";
 import { MoveRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
 type Message =
@@ -18,6 +18,10 @@ type Message =
       reason: string;
     }
   | {
+      action: "stop";
+      reason: string;
+    }
+  | {
       action: "fields";
       reason: string;
       fields: string[];
@@ -25,8 +29,9 @@ type Message =
     };
 
 export default function Application() {
-  const { pageImages, fileToken } = useContext(PageImagesContext);
-  const { replace } = useRouter();
+  const { pageImages, fileToken, allFields, setAllFields } =
+    useContext(AppContext);
+  const { replace, push } = useRouter();
 
   // Whether we've started the AI or not
   const [started, setStarted] = useState(false);
@@ -42,11 +47,16 @@ export default function Application() {
     first: currentMessage,
     remove,
   } = useQueue<Message>();
-  const [allFields, setAllFields] = useState<string[]>(["hello", "how"]);
 
-  function addFields(newFields: string[]) {
-    setAllFields([...allFields, ...newFields]);
-  }
+  const addFields = useCallback(
+    (pageNum: number, newFields: string[]) => {
+      setAllFields({
+        ...allFields,
+        [pageNum]: newFields,
+      });
+    },
+    [allFields, setAllFields]
+  );
 
   useEffect(() => {
     if (readyState === ReadyState.OPEN && fileToken !== "") {
@@ -72,10 +82,8 @@ export default function Application() {
             clearMessageQueue();
             addToMessageQueue(dataJson);
             setPageIndex(0);
+            setAllFields({});
             setStarted(true);
-          } else if (dataJson.action === "fields") {
-            addFields(dataJson.fields);
-            addToMessageQueue(dataJson);
           } else {
             addToMessageQueue(dataJson);
           }
@@ -90,6 +98,10 @@ export default function Application() {
     // Auto-advance from start message
     if (currentMessage?.action === "start" && hasNewMessages) {
       remove();
+    } else if (currentMessage?.action === "fields") {
+      addFields(pageIndex, currentMessage.fields);
+    } else if (currentMessage?.action === "stop") {
+      push("/fill");
     }
   }, [currentMessage, remove, hasNewMessages]);
 
@@ -111,6 +123,8 @@ export default function Application() {
       setPageIndex(pageIndex + 1);
     }
   }
+
+  const numFields = Object.values(allFields).flat().length;
 
   return (
     <main className="flex min-h-screen p-12 pt-24 flex-col items-center justify-center max-w-3xl mx-auto">
@@ -143,9 +157,20 @@ export default function Application() {
         <div>
           <img src={`data:image/png;base64,${pageImages[pageIndex]}`} />
         </div>
-        {allFields.length > 0 && (
-          <div className="fixed bottom-10 right-10 max-w-20">
-            {allFields.join(",")}
+        {numFields > 0 && (
+          <div className="border-2 p-8 border-[var(--foreground-rgb)] rounded-lg fixed min-h-40 max-h-[80%] bottom-10 right-10 max-w-60 overflow-scroll">
+            <h2 className="text-xl font-bold mb-2">
+              Data needed ({numFields})
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {Object.values(allFields)
+                .flat()
+                .map((it, i) => (
+                  <code className="rounded-md bg-slate-100 p-1 text-xs" key={i}>
+                    {it}
+                  </code>
+                ))}
+            </div>
           </div>
         )}
       </div>

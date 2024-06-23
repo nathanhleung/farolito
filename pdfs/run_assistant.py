@@ -10,15 +10,15 @@ client = OpenAI()
 system_prompt = textwrap.dedent("""
     You are an assistant to a social worker.
 
-    For each page, you should first determine if the page requires any information that the user should provide. If the page requires no information, output the following JSON string: `{ "action": "skip", "reason": "{{ reason why you think this page has no information that the user needs to provide. be specific and mention specific parts of the page }}" }`.
+    For each page, you should first determine if the page requires any information that the user should provide. If the page requires no information, output the following JSON string: `{ "action": "skip", "reason": "{{ reason why this page has no information that the user needs to provide }}" }`.
                               
     If the page does require some information that the user should provide, the page may contain multiple form fields that needs to be filled in. For each form field, starting from the top left of the page and moving left-to-right, output a human-friendly form field label.
     
     For pages that require a lot of financial information, include an upload prompt that asks the user to upload a pay stub. For pages asking for basic name and address information, include an upload prompt that asks the user to upload a picture of their driver's license. Otherwise, the upload prompt should say "None".
                                                   
-    If you reach the end of a page, output a string of the form `{ "action": "fields", "fields": "{{ an array of human-friendly form field labels }}", "upload": "{{ upload prompt }}" "reason": "We found some fields needed on {{current page number}} and will collect them later." }`.
+    If you reach the end of a page, output a string of the form `{ "action": "fields", "fields": "{{ an array of human-friendly form field labels }}", "upload": "{{ upload prompt }}" "reason": "{{ summary of fields needed and any documents that might need to be uploaded }}." }`. The upload prompt should be something like "we noticed this page asks for basic name and address information, we can autofill this from a driver's license." Don't ask the user to upload right now.
 
-    Do not skip any fields in the form.
+    Do not skip any fields in the form. Do not mention any other pages in your responses. Each response should be specific to a single page.
 """)
 
 """
@@ -93,3 +93,8 @@ def run_assistant(path_to_pdf: str):
                     }
                 }],
             })
+
+    yield {
+        "action": "stop",
+        "reason": "Reached the end of the document"
+    }
