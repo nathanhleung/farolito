@@ -21,9 +21,8 @@ Get the bounding box around field label from the
 EasyOCR results
 """
 def _get_field_label_bounding_box(field_name: str, ocr_results):
-    print(field_name)
+
     field = next(result for result in ocr_results if field_name in result[1])
-    print(field)
     return field[0]
 
 """
@@ -36,7 +35,7 @@ def _get_reasonable_field_font_size(field_name: str, ocr_results):
     bottom_left_coordinates = bounding_box[3]
     top_left_y_coordinate = top_left_coordinates[1]
     bottom_left_y_coordinate = bottom_left_coordinates[1]
-    return int((bottom_left_y_coordinate - top_left_y_coordinate) * 1.5)
+    return int((bottom_left_y_coordinate - top_left_y_coordinate) * 1)
 
 """
 Writes the `value` for the given `field_name` on page `page`
@@ -49,9 +48,14 @@ def fill_fields_on_pdf_page(path_to_pdf: str, page: int, field_values_to_fill: d
     img = Image.open(page_images_bytes[page])
     draw = ImageDraw.Draw(img)
 
+    print(field_values_to_fill)
+
     for key in field_values_to_fill.keys():
         field_name = key
         value = field_values_to_fill[key]
+
+        if value == "None":
+            continue
 
         open_sans_font = ImageFont.truetype(
             'assets/OpenSans.ttf',
@@ -59,9 +63,11 @@ def fill_fields_on_pdf_page(path_to_pdf: str, page: int, field_values_to_fill: d
         )
         bounding_box = _get_field_label_bounding_box(field_name, ocr_results)
         # Put the field value to the right of the label
-        top_right_coordinates = bounding_box[1]
+        top_left_coordinates = bounding_box[0]
+        top_left_coordinates[0] += 50
+        top_left_coordinates[1] += 30
         draw.text(
-            top_right_coordinates, value,
+            top_left_coordinates, value,
             font=open_sans_font,
             fill=(0, 0, 255)
         )

@@ -11,7 +11,7 @@ import os
 
 load_dotenv()
 
-paystub_form_fields = "First name, last name, employer name, employer address, pay period (options: hourly, weekly, every two weeks, monthly), pay"
+paystub_form_fields = "First name, last name, employer name and employer address, pay period (options: hourly, weekly, every two weeks, monthly), pay"
 dl_form_fields = "First name, last name, home address, apt or suite number (optional), city, state, ZIP code, and date of birth"
 
 api_key = os.environ["OPENAI_API_KEY"]
@@ -44,7 +44,8 @@ async def upload_drivers(file: UploadFile = File(...)):
     response = client.chat.completions.create(
         model =  "gpt-4o",
         messages = messages,
-        max_tokens = 300
+        max_tokens = 300,
+        temperature = 0.1
     )
 
     response_json = response.choices[0].message.content
@@ -66,7 +67,7 @@ async def upload_paystub(file: UploadFile = File(...)):
     messages = [{"role": "user", 
         "content": [{
             "type": "text",
-            "text": f"Identify the values for these fields in the image: {paystub_form_fields}:? Format your response similar to the example {{\"First name\": \"Albert\"}} and make sure the response is valid JSON."
+            "text": f"Identify the values for these fields in the image: {paystub_form_fields}:? Keep employer name and address together as one field. Format your response similar to the example {{\"First name\": \"Albert\"}} and make sure the response is valid JSON."
         },
         {
             "type": "image_url",
@@ -77,7 +78,8 @@ async def upload_paystub(file: UploadFile = File(...)):
     response = client.chat.completions.create(
         model =  "gpt-4o",
         messages = messages,
-        max_tokens = 300
+        max_tokens = 300,
+        temperature = 0.1
     )
 
     response_json = response.choices[0].message.content

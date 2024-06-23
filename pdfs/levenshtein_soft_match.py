@@ -34,7 +34,19 @@ html_response = {
     }
 }
 
-ocr_results = _get_pdf_page_ocr_results("assets/hawaii_medicaid.pdf", 2)
+html_response = {
+    "page": 5,
+    "data": {
+        "First name": "Sharon",
+        "Last name": "Boll",
+        "Employer name": "LITTLE CAESAR'S",
+        "Employer address": "2424 S Beretania St, Honolulu, HI, 96826, United States",
+        "Pay period": "every two weeks",
+        "Pay": "$678.85"
+    }
+}
+
+ocr_results = _get_pdf_page_ocr_results("assets/hawaii_medicaid.pdf", 5)
 ocr_field_names = [field[1] for field in ocr_results]
 
 print(ocr_field_names)
