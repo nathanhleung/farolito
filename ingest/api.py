@@ -14,7 +14,7 @@ load_dotenv()
 paystub_form_fields = "First name, last name, employer name, employer address, pay period (options: hourly, weekly, every two weeks, monthly), pay"
 dl_form_fields = "First name, last name, home address, apt or suite number (optional), date of birth"
 
-api_key = os.environ["OPEN_API_KEY"]
+api_key = os.environ["OPENAI_API_KEY"]
 client = OpenAI(api_key=api_key)
 
 app = FastAPI()
