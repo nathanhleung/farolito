@@ -1,5 +1,6 @@
+import json
 import aiofiles
-from fastapi import FastAPI, WebSocket, File, UploadFile
+from fastapi import FastAPI, Form, WebSocket, File, UploadFile
 from fastapi.responses import Response
 from dotenv import load_dotenv
 from pdf_to_pngs import pdf_bytes_to_pngs_base64
@@ -69,14 +70,15 @@ app.add_middleware(
 )
 
 @app.post("/fill-fields")
-async def fill_fields(html_response: HTMLResponse):
-    page_number = html_response.page - 1
-    fill_data = html_response.data
+async def fill_fields(page_index: str = Form(), file_token: str = Form(), data: str = Form()):
+    print("Filling fields...")
+    page_index = int(page_index)
+    fill_data = json.loads(data)
 
-    # Need to change file_path
-    file_path = "assets/hawaii_medicaid.pdf"
+    file_path = "user_data/" + file_token + ".pdf"
 
-    ocr_results = _get_pdf_page_ocr_results(file_path, page_number)
+    print("Running OCR...")
+    ocr_results = _get_pdf_page_ocr_results(file_path, page_index)
     ocr_field_names = [field[1] for field in ocr_results]
     
     field_values = {}
@@ -90,5 +92,8 @@ async def fill_fields(html_response: HTMLResponse):
         if ocr_field_name != "None":
             field_values[ocr_field_name] = fill_data[html_field]
 
-    image_bytes = fill_fields_on_pdf_page(file_path, page_number, field_values)
+    print(field_values)
+
+    print("Generating image...")
+    image_bytes = fill_fields_on_pdf_page(file_path, page_index, field_values)
     return Response(content=image_bytes, media_type="image/png")

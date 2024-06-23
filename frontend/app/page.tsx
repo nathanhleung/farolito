@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { useCallback, useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { MoveRight } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 
 export default function Home() {
+  const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
   const { pageImages, setPageImages, setFileToken } = useContext(AppContext);
 
@@ -20,6 +22,10 @@ export default function Home() {
 
       try {
         setUploading(true);
+        toast({
+          title: "Uploading...",
+          description: "Uploading your file...",
+        });
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_PDFS_API_ENDPOINT}/get-pdf-images`,
           {
@@ -30,6 +36,10 @@ export default function Home() {
         const json = await response.json();
         setPageImages(json.page_images);
         setFileToken(json.file_token);
+        toast({
+          title: "Uploaded",
+          description: "Successfully uploaded your file",
+        });
       } finally {
         setUploading(false);
       }

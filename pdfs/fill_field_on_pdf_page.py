@@ -23,7 +23,9 @@ EasyOCR results
 """
 def _get_field_label_bounding_box(field_name: str, ocr_results):
 
-    field = next(result for result in ocr_results if field_name in result[1])
+    field = next((result for result in ocr_results if field_name in result[1]), None)
+    if field is None:
+        return None
     return field[0]
 
 """
@@ -31,12 +33,17 @@ Gets a reasonable font size to use to fill out the form
 based on the bounding box of the label
 """
 def _get_reasonable_field_font_size(field_name: str, ocr_results):
+    default_font_size = 30
+
     bounding_box = _get_field_label_bounding_box(field_name, ocr_results)
+    if bounding_box is None:
+        return default_font_size
+    
     top_left_coordinates = bounding_box[0]
     bottom_left_coordinates = bounding_box[3]
     top_left_y_coordinate = top_left_coordinates[1]
     bottom_left_y_coordinate = bottom_left_coordinates[1]
-    return (bottom_left_y_coordinate - top_left_y_coordinate)
+    return max(bottom_left_y_coordinate - top_left_y_coordinate, default_font_size)
 
 """
 Writes the `value` for the given `field_name` on page `page`
@@ -59,10 +66,14 @@ def fill_fields_on_pdf_page(path_to_pdf: str, page: int, field_values_to_fill: d
             continue
 
         open_sans_font = ImageFont.truetype(
-            'assets/OpenSans.ttf',
+            '../assets/OpenSans.ttf',
             _get_reasonable_field_font_size(field_name, ocr_results)
         )
         bounding_box = _get_field_label_bounding_box(field_name, ocr_results)
+        # If we can't find the field, just skip
+        if bounding_box is None:
+            continue
+
         # Put the field value to the right of the label
         top_left_coordinates = bounding_box[0]
         top_left_coordinates[0] += 50
@@ -76,5 +87,5 @@ def fill_fields_on_pdf_page(path_to_pdf: str, page: int, field_values_to_fill: d
     img_byte_arr = io.BytesIO()
     img.save(img_byte_arr, format='PNG')
     img_byte_arr = img_byte_arr.getvalue()
-    # img.show()
+    img.show()
     return img_byte_arr

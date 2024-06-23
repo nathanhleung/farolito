@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { groupBy } from "lodash";
 import { useRouter } from "next/navigation";
 import { FormEvent, useCallback, useContext, useEffect, useState } from "react";
 
@@ -12,125 +13,15 @@ export default function Fill() {
   const { toast } = useToast();
   const { replace } = useRouter();
 
-  const { allFields, setAllFields } = useContext(AppContext);
+  const { allFields, setAllFields, fileToken } = useContext(AppContext);
+  const [generating, setGenerating] = useState(false);
 
-  // for testing
   useEffect(() => {
-    setAllFields({
-      "2": [
-        "First name",
-        "Middle name",
-        "Last name",
-        "Suffix",
-        "Home address",
-        "Apartment or suite number",
-        "City",
-        "State",
-        "ZIP code",
-        "County",
-        "Mailing address (if different from home address)",
-        "Apartment or suite number (mailing address)",
-        "City (mailing address)",
-        "State (mailing address)",
-        "ZIP code (mailing address)",
-        "County (mailing address)",
-        "Home phone number",
-        "Cell phone number",
-        "Other phone number",
-        "Email Address",
-        "Preferred method of contact",
-        "Preferred spoken language (if not English)",
-        "Preferred written language (if not English)",
-        "Number of family members living with you",
-        "Is any family member incarcerated or residing in Hawaii State Hospital?",
-        "Name of incarcerated family member",
-        "Start Date of Incarceration",
-        "End Date of Incarceration",
-      ],
-      "4": [
-        "First name",
-        "Middle name",
-        "Last name",
-        "Suffix",
-        "Relationship to PERSON 1",
-        "Date of birth (mm/dd/yyyy)",
-        "Gender (Optional)",
-        "Social Security Number (SSN)",
-        "Name of spouse if married",
-        "Do you plan to file a federal income tax return NEXT YEAR?",
-        "Will you file jointly with a spouse?",
-        "Will you claim any tax dependents on your tax return?",
-        "Will you be claimed as a tax dependent on someone’s tax return?",
-        "Are you pregnant?",
-        "How many babies are expected during this pregnancy?",
-        "Are you applying for medical assistance?",
-        "If applying for insurance are you a resident of Hawaii?",
-        "Does this person have a spouse or parent that lives outside the household?",
-        "Were you ever in an accident? If so, are you still incurring medical expenses because of it?",
-        "Do you have a disability that will last more than twelve (12) months?",
-        "Do you currently receive long-term care nursing services?",
-        "Have you received long-term care nursing services in the last three (3) months?",
-        "Do you think you need long-term care nursing services now?",
-        "Do you receive Supplemental Security Income (SSI)?",
-        "Did you receive any medical services in the past three (3) months immediately prior to the date of this application?",
-        "Are you a U.S. citizen or U.S. national?",
-        "If you are not a U.S. citizen or U.S. national, do you have eligible immigration status?",
-        "Immigration document type (i.e. I-551, Visa, etc.)",
-        "Status type (optional)",
-        "Name as it appears on your immigration document",
-        "Alien or I-94 Number",
-        "Passport number or other card number",
-        "SEVIS ID or Expiration Date (optional)",
-        "Other (category code or country of issuance)",
-        "Provide the date of entry to the U.S. found on your immigration document listed in question 15. (mm/dd/yyyy)",
-        "Are you a citizen of the Federated States of Micronesia, Republic of the Marshall Islands, or Republic of Palau?",
-        "Are you, your spouse or parent, a veteran, or an active-duty member of the U.S. military?",
-        "Were you in Foster Care, or receiving Kinship or State Adoption assistance and receiving Medicaid when you turned 18 or older?",
-        "If Hispanic/Latino, ethnicity (OPTIONAL: mark all that apply)",
-        "Race (OPTIONAL: mark all that apply)",
-      ],
-      "5": [
-        "Employment Status",
-        "Changed Jobs",
-        "Stopped Working",
-        "Started Working Fewer Hours",
-        "Employer's Name and Address",
-        "Employer Phone Number",
-        "Wages/Tips (Before Taxes)",
-        "Pay Frequency",
-        "Average Hours Worked Each Week",
-        "Employer's Name and Address (Additional Job)",
-        "Employer Phone Number (Additional Job)",
-        "Wages/Tips (Before Taxes) (Additional Job)",
-        "Pay Frequency (Additional Job)",
-        "Average Hours Worked Each Week (Additional Job)",
-        "Type of Work (Self-employment)",
-        "Gross Income from Self-employment this Month",
-        "Unemployment",
-        "Pensions",
-        "Social Security",
-        "Retirement Accounts",
-        "Alimony Received",
-        "Net Farming/Fishing",
-        "Net Rental/Royalty",
-        "Educational Grant/Work Study",
-        "Other Type of Income",
-        "Other Income Amount",
-        "Alimony Paid",
-        "Type of Deductions",
-        "Student Loan Interest",
-        "Net Yearly Income (This Year)",
-        "Net Yearly Income (Next Year, if different)",
-      ],
-    });
-  }, []);
-
-  // useEffect(() => {
-  //   if (Object.keys(allFields).length === 0) {
-  //     replace("/");
-  //   }
-  //   console.log(allFields);
-  // }, [allFields, replace]);
+    if (Object.keys(allFields).length === 0) {
+      replace("/");
+    }
+    console.log(allFields);
+  }, [allFields, replace]);
 
   const [uploadingDriversLicense, setUploadingDriversLicense] = useState(false);
   const [driversLicenseFile, setDriversLicenseFile] = useState<File | null>(
@@ -211,10 +102,56 @@ export default function Fill() {
     }
   }
 
-  function handleSubmit(e: SubmitEvent) {
+  async function handleSubmit(e: SubmitEvent) {
     e.preventDefault();
     const formData = new FormData(e.target);
-    console.log(formData);
+    const formDataObject = Object.fromEntries(formData);
+    const inputNamesByPageNum = groupBy(
+      Object.keys(formDataObject),
+      (inputName) => {
+        const [pageNum] = inputName.split("__");
+        return pageNum;
+      }
+    );
+
+    for (const pageNum of Object.keys(inputNamesByPageNum)) {
+      const dataForPage = {};
+      for (const inputName of inputNamesByPageNum[pageNum]) {
+        const [, cleanedInputName] = inputName.split("__");
+        const maybeId = cleanedInputName.toLowerCase().replace(" ", "");
+        const value = document.getElementById(maybeId)?.value;
+        dataForPage[cleanedInputName] = value;
+      }
+
+      const formDataForPage = new FormData();
+      formDataForPage.append("page_index", pageNum.toString());
+      formDataForPage.append(
+        "file_token",
+        "4a377212-0c54-4dee-a550-85d531ec4294"
+      );
+
+      // formDataForPage.append("file_token", fileToken.toString());
+      formDataForPage.append("data", JSON.stringify(dataForPage));
+
+      console.log(formDataForPage);
+      setGenerating(true);
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_PDFS_API_ENDPOINT}/fill-fields`,
+          {
+            method: "POST",
+            body: formDataForPage,
+          }
+        );
+
+        console.log(response);
+      } finally {
+        setGenerating(false);
+      }
+      // Just generate one image for now
+      break;
+    }
   }
 
   return (
@@ -289,8 +226,13 @@ export default function Fill() {
                 </div>
               );
             })}
-            <Button size="lg" className="self-start" type="submit">
-              Generate PDF
+            <Button
+              size="lg"
+              className="self-start"
+              type="submit"
+              disabled={generating}
+            >
+              {generating ? "Generating..." : "Generate PDF"}
             </Button>
           </form>
         </div>
