@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>title</title>
+</head>
+<body>
+    <h2>Pay stub upload</h2>
+    <form method="post" action="http://127.0.0.1:8000/upload-paystub/" enctype="multipart/form-data">
+        <div>
+            <label for="file">Choose file to upload</label>
+            <input type="file" id="file" name="file" multiple />
+        </div>
+        <div>
+            <button>Submit</button>
+        </div>
+    </form>
+
+    <h2>DL upload</h2>
+    <form method="post" action="http://127.0.0.1:8000/upload-drivers/" enctype="multipart/form-data">
+        <div>
+            <label for="file">Choose file to upload</label>
+            <input type="file" id="file" name="file" multiple />
+        </div>
+        <div>
+            <button>Submit</button>
+        </div>
+    </form>
+
+    <h2>JSON post</h2>
+    <button onclick="send()">Send</button>
+</body>
+
+<script>
+    function send() {
+        // const json = {'page': 6, 'data': {'First name': 'Sharon', 'Last name': 'Boll', 'Employer name and address': "LITTLE CAESAR'S, 2424 S Beretania St, Honolulu, HI, 96826, United States", 'Pay period': 'every two weeks', 'Pay': '$678.85'}}
+        const json = {'page': 3, 'data': {"First name":"SHARON","Last name":"BOLL","Home address":"P O BOX 1576","Apt or suite number":"","City":"KAPAA","State":"HI","ZIP code":"96746","Date of birth":"01/27/1971"}}
+
+        fetch("http://127.0.0.1:8000/fill-fields", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(json),
+        });
+    }
+</script>
+</html>

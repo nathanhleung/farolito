@@ -4,6 +4,7 @@ import pdf_to_pngs
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+import io
 
 reader = easyocr.Reader(['en'])
 
@@ -35,7 +36,7 @@ def _get_reasonable_field_font_size(field_name: str, ocr_results):
     bottom_left_coordinates = bounding_box[3]
     top_left_y_coordinate = top_left_coordinates[1]
     bottom_left_y_coordinate = bottom_left_coordinates[1]
-    return int((bottom_left_y_coordinate - top_left_y_coordinate) * 1)
+    return (bottom_left_y_coordinate - top_left_y_coordinate)
 
 """
 Writes the `value` for the given `field_name` on page `page`
@@ -71,4 +72,9 @@ def fill_fields_on_pdf_page(path_to_pdf: str, page: int, field_values_to_fill: d
             font=open_sans_font,
             fill=(0, 0, 255)
         )
-    img.show()
+
+    img_byte_arr = io.BytesIO()
+    img.save(img_byte_arr, format='PNG')
+    img_byte_arr = img_byte_arr.getvalue()
+    # img.show()
+    return img_byte_arr
