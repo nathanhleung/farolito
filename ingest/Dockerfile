@@ -7,6 +7,6 @@ RUN pip install -r requirements.txt
 
 ADD api.py .
 
-CMD [ "python", "-u", "/api.py" ]
+CMD [ "fastapi", "run", "/api.py" ]
 
 EXPOSE 8000
