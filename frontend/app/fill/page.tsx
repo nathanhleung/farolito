@@ -7,7 +7,9 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { groupBy } from "lodash";
 import { useRouter } from "next/navigation";
-import { FormEvent, useCallback, useContext, useEffect, useState } from "react";
+import logo from "../logo.png";
+import Image from "next/image";
+import { FormEvent, useContext, useEffect, useState } from "react";
 
 export default function Fill() {
   const { toast } = useToast();
@@ -125,12 +127,7 @@ export default function Fill() {
 
       const formDataForPage = new FormData();
       formDataForPage.append("page_index", pageNum.toString());
-      formDataForPage.append(
-        "file_token",
-        "4a377212-0c54-4dee-a550-85d531ec4294"
-      );
-
-      // formDataForPage.append("file_token", fileToken.toString());
+      formDataForPage.append("file_token", fileToken.toString());
       formDataForPage.append("data", JSON.stringify(dataForPage));
 
       console.log(formDataForPage);
@@ -157,7 +154,7 @@ export default function Fill() {
   return (
     <main className="flex min-h-screen p-12 pt-24 flex-col items-center justify-center max-w-5xl mx-auto">
       <div className="flex flex-col text-center pb-12 gap-4 max-w-3xl">
-        <h1 className="text-5xl font-bold">FreeFillableForms.ai</h1>
+        <Image src={logo} alt="Lighthouse.ai" />
         <p>
           Upload your state government&apos;s Medicaid application form and
           we&apos;ll help you fill it 2x faster out with information you already

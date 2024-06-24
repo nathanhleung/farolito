@@ -7,6 +7,8 @@ import { MoveRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useContext, useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import Image from "next/image";
+import logo from "../logo.png";
 
 type Message =
   | {
@@ -129,7 +131,7 @@ export default function Application() {
   return (
     <main className="flex min-h-screen p-12 pt-24 flex-col items-center justify-center max-w-3xl mx-auto">
       <div className="flex flex-col text-center pb-12 gap-4">
-        <h1 className="text-5xl font-bold">FreeFillableForms.ai</h1>
+        <Image src={logo} alt="Lighthouse.ai" />
         <p>
           Upload your state government&apos;s Medicaid application form and
           we&apos;ll help you fill it 2x faster out with information you already
@@ -158,7 +160,7 @@ export default function Application() {
           <img src={`data:image/png;base64,${pageImages[pageIndex]}`} />
         </div>
         {numFields > 0 && (
-          <div className="border-2 p-8 border-[var(--foreground-rgb)] rounded-lg fixed min-h-40 max-h-[80%] bottom-10 right-10 max-w-60 overflow-scroll">
+          <div className="border-2 p-8 border-[var(--foreground-rgb)] rounded-lg fixed min-h-40 max-h-[80%] bottom-10 right-10 max-w-60 overflow-scroll bg-white">
             <h2 className="text-xl font-bold mb-2">
               Data needed ({numFields})
             </h2>

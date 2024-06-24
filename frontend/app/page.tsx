@@ -7,6 +7,8 @@ import { useDropzone } from "react-dropzone";
 import { MoveRight } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "./logo.png";
 
 export default function Home() {
   const { toast } = useToast();
@@ -53,7 +55,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen p-12 pt-24 flex-col items-center justify-center max-w-3xl mx-auto">
       <div className="flex flex-col text-center pb-12 gap-4">
-        <h1 className="text-5xl font-bold">FreeFillableForms.ai</h1>
+        <Image src={logo} alt="Lighthouse.ai" />
         <p>
           Upload your state government&apos;s Medicaid application form and
           we&apos;ll help you fill it 2x faster out with information you already
