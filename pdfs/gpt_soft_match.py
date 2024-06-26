@@ -1,7 +1,6 @@
 from dotenv import load_dotenv
 from openai import OpenAI
 import json
-from fill_field_on_pdf_page import fill_fields_on_pdf_page, _get_pdf_page_ocr_results
 
 load_dotenv()
 client = OpenAI()

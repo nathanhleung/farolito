@@ -3,7 +3,8 @@
 import { createContext, useState } from "react";
 
 type TFields = {
-  [pageIndex: number]: string[];
+  // should ideally be a number, but js object keys are always strings
+  [pageIndex: string]: string[];
 };
 
 type TAppContext = {

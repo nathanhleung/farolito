@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
@@ -19,10 +20,6 @@
     "lucide-react": "^0.396.0",
     "next": "14.2.4",
     "openai": "^4.52.0",
-    "pdf-lib": "^1.17.1",
-    "pdf-parse": "^1.1.1",
-    "pdf2pic": "^3.1.1",
-    "pdfjs-dist": "^4.3.136",
     "react": "^18",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
@@ -33,7 +30,6 @@
   "devDependencies": {
     "@types/lodash": "^4.17.5",
     "@types/node": "^20",
-    "@types/pdf-parse": "^1.1.4",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",

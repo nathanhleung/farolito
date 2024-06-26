@@ -1,5 +1,7 @@
 from python:3.11.1-buster
 
+LABEL org.opencontainers.image.source https://github.com/nathanhleung/lighthouse
+
 WORKDIR /
 
 COPY requirements.txt .

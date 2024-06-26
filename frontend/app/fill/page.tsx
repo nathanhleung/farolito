@@ -10,12 +10,13 @@ import { useRouter } from "next/navigation";
 import logo from "../logo.png";
 import Image from "next/image";
 import { FormEvent, useContext, useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Fill() {
   const { toast } = useToast();
   const { replace } = useRouter();
 
-  const { allFields, setAllFields, fileToken } = useContext(AppContext);
+  const { allFields, fileToken } = useContext(AppContext);
   const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
@@ -104,9 +105,13 @@ export default function Fill() {
     }
   }
 
-  async function handleSubmit(e: SubmitEvent) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const form = e.target as HTMLFormElement;
+    if (!form) {
+      return;
+    }
+    const formData = new FormData(form);
     const formDataObject = Object.fromEntries(formData);
     const inputNamesByPageNum = groupBy(
       Object.keys(formDataObject),
@@ -117,12 +122,15 @@ export default function Fill() {
     );
 
     for (const pageNum of Object.keys(inputNamesByPageNum)) {
-      const dataForPage = {};
+      const dataForPage: { [inputName: string]: string } = {};
       for (const inputName of inputNamesByPageNum[pageNum]) {
         const [, cleanedInputName] = inputName.split("__");
         const maybeId = cleanedInputName.toLowerCase().replace(" ", "");
-        const value = document.getElementById(maybeId)?.value;
-        dataForPage[cleanedInputName] = value;
+        const maybeElement = document.getElementById(maybeId);
+        if (maybeElement && maybeElement instanceof HTMLInputElement) {
+          const value = maybeElement.value;
+          dataForPage[cleanedInputName] = value;
+        }
       }
 
       const formDataForPage = new FormData();
@@ -132,6 +140,10 @@ export default function Fill() {
 
       console.log(formDataForPage);
       setGenerating(true);
+      toast({
+        title: "Generating filled pdf...",
+        description: "Please be patient, this may take up to two minutes...",
+      });
 
       try {
         const response = await fetch(
@@ -142,7 +154,15 @@ export default function Fill() {
           }
         );
 
-        console.log(response);
+        toast({
+          title: "Generated filled pdf!",
+          description:
+            "Successfully generated filled pdf! You may need to disable your pop-up viewer to see it.",
+        });
+
+        const json = await response.json();
+        const img_base64 = json.image;
+        window.open(`data:image/png;base64,${img_base64}`);
       } finally {
         setGenerating(false);
       }
@@ -154,7 +174,7 @@ export default function Fill() {
   return (
     <main className="flex min-h-screen p-12 pt-24 flex-col items-center justify-center max-w-5xl mx-auto">
       <div className="flex flex-col text-center pb-12 gap-4 max-w-3xl">
-        <Image src={logo} alt="Lighthouse.ai" />
+        <Image src={logo} alt="Lighthouse AI Logo" />
         <p>
           Upload your state government&apos;s Medicaid application form and
           we&apos;ll help you fill it 2x faster out with information you already
@@ -170,7 +190,7 @@ export default function Fill() {
               className="flex gap-2 flex-col items-start"
               onSubmit={handleDriversLicenseFileUpload}
             >
-              <Label>Autofill from Driver's License</Label>
+              <Label>Autofill from Driver&apos;s License</Label>
               <Input
                 type="file"
                 onChange={(e) =>
@@ -180,6 +200,11 @@ export default function Fill() {
               />
               <Button disabled={!driversLicenseFile || uploadingDriversLicense}>
                 {uploadingDriversLicense ? "Uploading..." : "Upload"}
+              </Button>
+              <Button size="sm" asChild>
+                <Link href="hawaii_dl.png" download target="_blank">
+                  Download Sample Driver's License
+                </Link>
               </Button>
             </form>
             <form

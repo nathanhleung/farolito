@@ -63,7 +63,7 @@ def run_assistant(path_to_pdf: str):
 
     current_page_index += 1
     # Stops on page 5 for demo purposes
-    while current_page_index < 6:
+    while True:
         print("Sending more messages")
         response = client.chat.completions.create(
             model = "gpt-4o",
@@ -79,7 +79,16 @@ def run_assistant(path_to_pdf: str):
         if parsed_response["action"] == "skip" or parsed_response["action"] == "fields":
             current_page_index += 1
             if current_page_index == total_pages:
+                yield {
+                    "action": "stop",
+                    "reason": "Reached the end of the document."
+                }
                 break
+            if current_page_index == 6:
+                yield {
+                    "action": "stop",
+                    "reason": "Demo stopping at page 6."
+                }
 
             messages.append({
                 "role": "user",
@@ -93,8 +102,3 @@ def run_assistant(path_to_pdf: str):
                     }
                 }],
             })
-
-    yield {
-        "action": "stop",
-        "reason": "Reached the end of the document"
-    }

@@ -21,7 +21,7 @@ client = OpenAI(api_key=api_key)
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
+    "*"
 ]
 
 app.add_middleware(

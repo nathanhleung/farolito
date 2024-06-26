@@ -1,10 +1,13 @@
+import base64
 import json
+from typing import Optional
 import aiofiles
 from fastapi import FastAPI, Form, WebSocket, File, UploadFile
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse, Response
 from dotenv import load_dotenv
 from pdf_to_pngs import pdf_bytes_to_pngs_base64
 from uuid import uuid4
+import pathlib
 import asyncio
 
 from fill_field_on_pdf_page import fill_fields_on_pdf_page, _get_pdf_page_ocr_results
@@ -23,9 +26,18 @@ def root():
     return {"message": "PDF API"}
 
 @app.post("/get-pdf-images")
-async def get_pdf_pngs_base64(file: UploadFile = File(...)):
-    contents = await file.read()
-    file_token = str(uuid4())
+async def get_pdf_pngs_base64(file: Optional[UploadFile] = None, use_sample: bool = Form(False)):
+    file_token = 'sample'
+    contents = pathlib.Path("user_data/sample.pdf").read_bytes()
+
+    print(use_sample)
+
+    if not use_sample:
+        if not file:
+            return {"message": "No upload file sent"}
+        file_token = str(uuid4())
+        contents = await file.read()
+
     page_images_base64 = pdf_bytes_to_pngs_base64(contents)
     async with aiofiles.open("user_data/" + file_token + ".pdf", 'wb') as out_file:
         await out_file.write(contents)
@@ -96,4 +108,7 @@ async def fill_fields(page_index: str = Form(), file_token: str = Form(), data: 
 
     print("Generating image...")
     image_bytes = fill_fields_on_pdf_page(file_path, page_index, field_values)
-    return Response(content=image_bytes, media_type="image/png")
+    img_base64 = base64.b64encode(image_bytes).decode("utf-8")
+    return JSONResponse(content={
+        'image':img_base64
+    })

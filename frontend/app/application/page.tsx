@@ -131,7 +131,7 @@ export default function Application() {
   return (
     <main className="flex min-h-screen p-12 pt-24 flex-col items-center justify-center max-w-3xl mx-auto">
       <div className="flex flex-col text-center pb-12 gap-4">
-        <Image src={logo} alt="Lighthouse.ai" />
+        <Image src={logo} alt="Lighthouse AI Logo" />
         <p>
           Upload your state government&apos;s Medicaid application form and
           we&apos;ll help you fill it 2x faster out with information you already
@@ -142,7 +142,8 @@ export default function Application() {
         <div className="flex flex-col items-start gap-4 pb-8">
           <p>
             We&apos;re on page {pageIndex + 1}/{pageImages.length}.{" "}
-            {currentMessage?.reason} {!started && "Loading AI..."}
+            {currentMessage?.reason}{" "}
+            {!started && "Loading AI, this may take a minute..."}
           </p>
           {currentMessage && currentMessage.action !== "start" && (
             <Button onClick={onClickNextButton} disabled={!hasNewMessages}>

@@ -1,8 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ["pdf2pic", "pdf-lib"],
-  },
-};
+const nextConfig = {};
 
 export default nextConfig;

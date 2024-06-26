@@ -1,6 +1,7 @@
 # custom
 chat/
-pdfs/user_data/
+pdfs/user_data/*
+!pdfs/user_data/sample.pdf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
