@@ -203,7 +203,7 @@ export default function Fill() {
               </Button>
               <Button size="sm" asChild>
                 <Link href="hawaii_dl.png" download target="_blank">
-                  Download Sample Driver's License
+                  Download Sample Driver&apos;s License
                 </Link>
               </Button>
             </form>
