@@ -170,48 +170,52 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div
-          className="flex items-center justify-center border-[var(--foreground-rgb)] border-2 rounded-lg border-dashed p-6 w-[50%] h-36 mx-auto text-center bg-slate-100"
-          {...getRootProps()}
-        >
-          <input {...getInputProps()} />
-          {uploading ? (
-            <p>Uploading...</p>
-          ) : isDragActive ? (
-            <p>Drop the application PDF here ...</p>
-          ) : (
-            <p>
-              Drop an application PDF here, or click to select a file from your
-              computer
-            </p>
-          )}
+        <div className="flex flex-col gap-2 items-center">
+          <div
+            className="flex items-center justify-center border-[var(--foreground-rgb)] border-2 rounded-lg border-dashed p-6 w-[50%] h-36 mx-auto text-center bg-slate-100"
+            {...getRootProps()}
+          >
+            <input {...getInputProps()} />
+            {uploading ? (
+              <p>Uploading...</p>
+            ) : isDragActive ? (
+              <p>Drop the application PDF here ...</p>
+            ) : (
+              <p>
+                Drop an application PDF here, or click to select a file from
+                your computer
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col pt-8">
+            <Button onClick={onClickRunWithSample} disabled={runningWithSample}>
+              {runningWithSample
+                ? "Running..."
+                : "Run With Sample Application PDF"}
+            </Button>
+            <Button variant="link" asChild>
+              <Link href="hawaii_medicaid.pdf" download target="_blank">
+                <small>Download Sample Application PDF</small>
+              </Link>
+            </Button>
+          </div>
         </div>
       )}
-      <div className="flex flex-col gap-2 pt-8">
-        <Button onClick={onClickRunWithSample} disabled={runningWithSample}>
-          {runningWithSample ? "Running..." : "Run With Sample Application PDF"}
-        </Button>
-        <Button variant="link" asChild>
-          <Link href="hawaii_medicaid.pdf" download target="_blank">
-            <small>Download Sample Application PDF</small>
-          </Link>
-        </Button>
-        <div className="flex gap-12 text-center pt-8 items-center justify-center">
-          <Link
-            className="text-black hover:opacity-50 underline"
-            href="https://github.com/nathanhleung/lighthouse"
-            target="_blank"
-          >
-            GitHub
-          </Link>
-          <Link
-            className="text-black hover:opacity-50 underline"
-            href="https://www.outofpocket.health/ai-hackathon"
-            target="_blank"
-          >
-            Out of Pocket AI Hackathon
-          </Link>
-        </div>
+      <div className="flex gap-12 text-center pt-8 items-center justify-center">
+        <Link
+          className="text-black hover:opacity-50 underline"
+          href="https://github.com/nathanhleung/lighthouse"
+          target="_blank"
+        >
+          GitHub
+        </Link>
+        <Link
+          className="text-black hover:opacity-50 underline"
+          href="https://www.outofpocket.health/ai-hackathon"
+          target="_blank"
+        >
+          Out of Pocket AI Hackathon
+        </Link>
       </div>
     </main>
   );
