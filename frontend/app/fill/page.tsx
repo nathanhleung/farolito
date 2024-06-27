@@ -222,6 +222,11 @@ export default function Fill() {
               <Button disabled={!paystubFile || uploadingPaystub}>
                 {uploadingPaystub ? "Uploading..." : "Upload"}
               </Button>
+              <Button size="sm" asChild>
+                <Link href="hawaii_pay_stub.pdf" download target="_blank">
+                  Download Sample Pay Stub
+                </Link>
+              </Button>
             </form>
           </div>
 
