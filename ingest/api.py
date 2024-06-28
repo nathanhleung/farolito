@@ -92,7 +92,8 @@ async def upload_paystub(file: UploadFile = File(...)):
     return JSONResponse(content=data_dict)
 
 origins = [
-    "*"
+    "https://lighthouse-ai.vercel.app",
+    "http://localhost:3000"
 ]
 
 app.add_middleware(
