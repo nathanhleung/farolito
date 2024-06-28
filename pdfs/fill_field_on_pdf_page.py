@@ -64,7 +64,7 @@ def fill_fields_on_pdf_page(path_to_pdf: str, page: int, field_values_to_fill: d
             continue
 
         open_sans_font = ImageFont.truetype(
-            '../assets/OpenSans.ttf',
+            'assets/OpenSans.ttf',
             _get_reasonable_field_font_size(field_name, ocr_results)
         )
         bounding_box = _get_field_label_bounding_box(field_name, ocr_results)
