@@ -69,18 +69,6 @@ class HTMLResponse(BaseModel):
     page : int
     data : dict
 
-origins = [
-    "*"
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 @app.post("/fill-fields")
 async def fill_fields(page_index: str = Form(), file_token: str = Form(), data: str = Form()):
     print("Filling fields...")
@@ -112,3 +100,15 @@ async def fill_fields(page_index: str = Form(), file_token: str = Form(), data: 
     return JSONResponse(content={
         'image':img_base64
     })
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

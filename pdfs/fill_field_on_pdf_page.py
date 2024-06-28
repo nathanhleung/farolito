@@ -56,8 +56,6 @@ def fill_fields_on_pdf_page(path_to_pdf: str, page: int, field_values_to_fill: d
     img = Image.open(page_images_bytes[page])
     draw = ImageDraw.Draw(img)
 
-    print(field_values_to_fill)
-
     for key in field_values_to_fill.keys():
         field_name = key
         value = field_values_to_fill[key]

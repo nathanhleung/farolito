@@ -20,18 +20,6 @@ client = OpenAI(api_key=api_key)
 
 app = FastAPI()
 
-origins = [
-    "*"
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 @app.get("/")
 def root():
     return {"message": "Hello World"}
@@ -102,3 +90,15 @@ async def upload_paystub(file: UploadFile = File(...)):
     data_dict = json.loads(response_json)
 
     return JSONResponse(content=data_dict)
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
