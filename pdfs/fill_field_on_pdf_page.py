@@ -15,6 +15,7 @@ Runs EasyOCR on the `page` of the given pdf
 def _get_pdf_page_ocr_results(path_to_pdf: str, page: int):
     page_images_bytes = pdf_to_pngs.pdf_to_pngs_bytes(path_to_pdf)
     ocr_results = reader.readtext(page_images_bytes[page].getvalue())
+    print("Running non-cached OCR results...")
     return ocr_results
 
 """
@@ -74,10 +75,9 @@ def fill_fields_on_pdf_page(path_to_pdf: str, page: int, field_values_to_fill: d
 
         # Put the field value to the right of the label
         top_left_coordinates = bounding_box[0]
-        top_left_coordinates[0] += 50
-        top_left_coordinates[1] += 30
         draw.text(
-            top_left_coordinates, value,
+            [top_left_coordinates[0] + 50, top_left_coordinates[1] + 30], 
+            value,
             font=open_sans_font,
             fill=(0, 0, 255)
         )
