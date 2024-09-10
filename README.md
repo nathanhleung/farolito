@@ -1,6 +1,5 @@
 <img src="./frontend/app/logo.png" alt="Farolito AI logo" height="150px">
 <br/>
-<br/>
 
 # Farolito AI
 
