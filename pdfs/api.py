@@ -103,7 +103,7 @@ async def fill_fields(page_index: str = Form(), file_token: str = Form(), data: 
 
 origins = [
     "http://localhost:3000",
-    "https://lighthouse-ai.vercel.app"
+    "https://farolito-ai.vercel.app"
 ]
 
 app.add_middleware(

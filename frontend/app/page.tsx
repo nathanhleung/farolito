@@ -91,7 +91,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen p-12 pt-24 flex-col items-center justify-center max-w-3xl mx-auto">
       <div className="flex flex-col text-center pb-12 gap-4">
-        <Image src={logo} alt="Lighthouse AI Logo" />
+        <Image src={logo} alt="Farolito AI Logo" />
         <p>
           Upload your state government&apos;s Medicaid application form and
           we&apos;ll help you fill it 2x faster out with information you already
@@ -130,7 +130,7 @@ export default function Home() {
                     Feel free to submit issues on{" "}
                     <Link
                       className="text-black hover:opacity-50 underline"
-                      href="https://github.com/nathanhleung/lighthouse/issues"
+                      href="https://github.com/nathanhleung/farolito/issues"
                     >
                       GitHub
                     </Link>{" "}
@@ -204,7 +204,7 @@ export default function Home() {
       <div className="flex gap-12 text-center pt-8 items-center justify-center">
         <Link
           className="text-black hover:opacity-50 underline"
-          href="https://github.com/nathanhleung/lighthouse"
+          href="https://github.com/nathanhleung/farolito"
           target="_blank"
         >
           GitHub

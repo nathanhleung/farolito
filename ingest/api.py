@@ -92,7 +92,7 @@ async def upload_paystub(file: UploadFile = File(...)):
     return JSONResponse(content=data_dict)
 
 origins = [
-    "https://lighthouse-ai.vercel.app",
+    "https://farolito-ai.vercel.app",
     "http://localhost:3000"
 ]
 

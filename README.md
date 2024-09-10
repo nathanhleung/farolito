@@ -1,8 +1,8 @@
-<img src="./frontend/app/logo.png" alt="Lighthouse AI logo">
+<img src="./frontend/app/logo.png" alt="Farolito AI logo">
 <br/>
 <br/>
 
-# Lighthouse AI
+# Farolito AI
 
 Guiding the way to government benefits. A project for the [Out of Pocket](https://www.outofpocket.health/) [AI Hackathon](https://www.outofpocket.health/ai-hackathon), June 2024 in San Francisco.
 
@@ -85,8 +85,8 @@ code for converting pdfs to images, writing text to pdfs, sending pdfs to openai
 
 (replace with your username/container registry)
 
-1. `docker build --platform linux/amd64 --tag ghcr.io/nathanhleung/lighthouse/pdfs:latest .` (in `pdfs` directory)
-1. `docker push ghcr.io/nathanhleung/lighthouse/pdfs:latest`
+1. `docker build --platform linux/amd64 --tag ghcr.io/nathanhleung/farolito/pdfs:latest .` (in `pdfs` directory)
+1. `docker push ghcr.io/nathanhleung/farolito/pdfs:latest`
 1. Set image id in Runpod, set `OPENAI_API_KEY` environment variable in Runpod
 
 ## `ingest`
@@ -102,8 +102,8 @@ FastAPI endpoints to read DL and paystub info
 
 (replace with your username/container registry)
 
-1. `docker build --platform linux/amd64 --tag ghcr.io/nathanhleung/lighthouse/ingest:latest .` (in `ingest` directory)
-1. `docker push ghcr.io/nathanhleung/lighthouse/ingest:latest`
+1. `docker build --platform linux/amd64 --tag ghcr.io/nathanhleung/farolito/ingest:latest .` (in `ingest` directory)
+1. `docker push ghcr.io/nathanhleung/farolito/ingest:latest`
 1. Set image id in Runpod, set `OPENAI_API_KEY` environment variable in Runpod
 
 ## `frontend`

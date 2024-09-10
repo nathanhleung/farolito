@@ -7,7 +7,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Lighthouse AI",
+  title: "Farolito AI",
   description:
     "Upload your state government's Medicaid application form and we'll help you fill it 2x faster out with information you already have.",
 };
