@@ -90,8 +90,13 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen p-12 pt-24 flex-col items-center justify-center max-w-3xl mx-auto">
-      <div className="flex flex-col text-center pb-12 gap-4">
-        <Image src={logo} alt="Farolito AI Logo" />
+      <div className="flex flex-col text-center pb-12 gap-4 items-center">
+        <Image
+          src={logo}
+          alt="Farolito AI Logo"
+          height={150}
+          className="rounded-lg border-2 border-black m-10"
+        />
         <p>
           Upload your state government&apos;s Medicaid application form and
           we&apos;ll help you fill it 2x faster out with information you already

@@ -1,58 +1,10 @@
-<img src="./frontend/app/logo.png" alt="Farolito AI logo">
+<img src="./frontend/app/logo.png" alt="Farolito AI logo" height="150px">
 <br/>
 <br/>
 
 # Farolito AI
 
 Guiding the way to government benefits. A project for the [Out of Pocket](https://www.outofpocket.health/) [AI Hackathon](https://www.outofpocket.health/ai-hackathon), June 2024 in San Francisco.
-
-## Slides/Prototypes
-
-[PDF Slides/Prototypes](./slides/slides.pdf)
-
-<table>
-    <tr>
-        <td>
-            <img src="./assets/slides/slide1.png">
-        </td>
-        <td>
-            <img src="./assets/slides/slide2.png">
-        </td>
-        <td>
-            <img src="./assets/slides/slide3.png">
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <img src="./assets/slides/slide4.png">
-        </td>
-        <td>
-            <img src="./assets/slides/slide5.png">
-        </td>
-        <td>
-            <img src="./assets/slides/slide6.png">
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <img src="./assets/slides/slide7.png">
-        </td>
-        <td>
-            <img src="./assets/slides/slide8.png">
-        </td>
-        <td>
-            <img src="./assets/slides/slide9.png">
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <img src="./assets/slides/slide10.png">
-        </td>
-        <td>
-            <img src="./assets/slides/slide11.png">
-        </td>
-    </tr>
-</table>
 
 ## Team
 
