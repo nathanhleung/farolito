@@ -2,6 +2,8 @@
 
 # Farolito AI
 
+> Formerly known as Lighthouse AI; [renamed due to existing trademark](./Letter%20re%20Lighthouse%20AI.pdf).
+
 Guiding the way to government benefits. A project for the [Out of Pocket](https://www.outofpocket.health/) [AI Hackathon](https://www.outofpocket.health/ai-hackathon), June 2024 in San Francisco.
 
 ## Team
